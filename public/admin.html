@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Pappa’s reviews admin</title>
+<link rel="icon" href="favicon.svg">
+<style>
+ :root{--deep:#142c27;--gold:#b88d47;--cream:#f7f5ef;--line:#dfe3dc;--ink:#26302d;--muted:#737a73}
+ *{box-sizing:border-box}
+ body{margin:0;font:15px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--cream);color:var(--ink)}
+ header{background:var(--deep);color:#f0eadc;padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+ header img{height:44px}
+ header h1{font-size:20px;margin:0;font-weight:600;flex:1}
+ main{max-width:960px;margin:0 auto;padding:24px 16px 60px}
+ .login{max-width:380px;margin:60px auto;background:#fff;padding:28px;border-radius:10px;box-shadow:0 8px 30px #0001}
+ .login h2{margin:0 0 6px;font-size:20px}
+ .login p{color:var(--muted);margin:0 0 18px;font-size:14px}
+ input,textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:#fff}
+ textarea{min-height:70px;resize:vertical}
+ button{font:inherit;border:0;border-radius:6px;padding:9px 16px;cursor:pointer;background:var(--gold);color:#fff;font-weight:600}
+ button.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+ button.danger{background:#fff;color:#b3261e;border:1px solid #e9b9b5}
+ .login button{width:100%;margin-top:12px}
+ .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+ .tabs button{background:#fff;color:var(--ink);border:1px solid var(--line);font-weight:500}
+ .tabs button.active{background:var(--deep);color:#fff;border-color:var(--deep)}
+ .card{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px;border-left:4px solid var(--gold);box-shadow:0 4px 18px #0000000d}
+ .card.approved{border-left-color:#2e7d32}
+ .meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:8px}
+ .badge{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:#f3ead9;color:#7a5a20}
+ .badge.ok{background:#e3f1e4;color:#2e7d32}
+ .name{font-weight:600;color:var(--ink);font-size:15px}
+ .stars{color:#e39a12;letter-spacing:2px}
+ .text{white-space:pre-wrap;margin:0 0 12px}
+ .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+ .empty,.error{text-align:center;color:var(--muted);padding:40px 0}
+ .error{color:#b3261e}
+ label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+</style>
+</head>
+<body>
+<header><img src="images/pappas-peacock-p.png?v=2" alt=""><h1>Reviews &amp; questions — admin</h1><button class="ghost" id="logout" hidden>Log out</button></header>
+<main id="app"></main>
+<script>
+// Moderation page for the website's reviews and questions. The password is the server's ADMIN_TOKEN;
+// it is kept only for this browser tab (sessionStorage).
+const app=document.getElementById('app');
+let token=null,items=[],filter='pending';
+try{token=sessionStorage.getItem('pappas-admin');}catch{}
+const el=(tag,props={},...kids)=>{const n=Object.assign(document.createElement(tag),props);n.append(...kids);return n;};
+async function api(path,options={}){
+ const r=await fetch('api/admin/reviews'+path,{...options,headers:{'Content-Type':'application/json','X-Admin-Token':token}});
+ if(r.status===401)throw new Error('auth');
+ if(r.status===404)throw new Error('disabled');
+ if(!r.ok)throw new Error('failed');
+ return r.status===204?null:r.json();
+}
+function login(message){
+ document.getElementById('logout').hidden=true;
+ const input=el('input',{type:'password',placeholder:'Admin password',autocomplete:'current-password'});
+ const form=el('form',{className:'login'},el('h2',{},'Sign in'),el('p',{},message||'Enter the admin password to moderate reviews and questions.'),input,el('button',{type:'submit'},'Sign in'));
+ form.onsubmit=e=>{e.preventDefault();token=input.value;try{sessionStorage.setItem('pappas-admin',token);}catch{}load();};
+ app.replaceChildren(form);input.focus();
+}
+async function load(){
+ try{items=await api('');document.getElementById('logout').hidden=false;render();}
+ catch(e){token=null;try{sessionStorage.removeItem('pappas-admin');}catch{}
+  login(e.message==='auth'?'Wrong password. Please try again.':e.message==='disabled'?'Admin is turned off: set ADMIN_TOKEN on the server and restart it.':'Could not reach the server.');}
+}
+function render(){
+ const counts={pending:items.filter(i=>!i.approved).length,approved:items.filter(i=>i.approved).length,all:items.length};
+ const tabs=el('div',{className:'tabs'},...['pending','approved','all'].map(f=>{const b=el('button',{className:f===filter?'active':''},`${f[0].toUpperCase()+f.slice(1)} (${counts[f]})`);b.onclick=()=>{filter=f;render();};return b;}));
+ const list=items.filter(i=>filter==='all'||(filter==='approved')===i.approved);
+ app.replaceChildren(tabs,...(list.length?list.map(card):[el('p',{className:'empty'},'Nothing here.')]));
+}
+function card(item){
+ const answer=el('textarea',{value:item.answer||'',placeholder:item.kind==='question'?'Write the answer shown under this question (required to publish a question)':'Optional reply shown under this review'});
+ const save=async approved=>{try{Object.assign(item,await api('/'+item.id,{method:'POST',body:JSON.stringify({approved,answer:answer.value})}));render();}catch(e){e.message==='auth'?load():alert('Could not save. Please try again.');}};
+ const approve=el('button',{},item.approved?'Save':(item.kind==='question'?'Publish with answer':'Approve'));approve.onclick=()=>{if(item.kind==='question'&&!answer.value.trim()){alert('Write an answer first — questions are shown with their answer.');answer.focus();return;}save(true);};
+ const hide=el('button',{className:'ghost'},'Unpublish');hide.hidden=!item.approved;hide.onclick=()=>save(false);
+ const del=el('button',{className:'danger'},'Delete');del.onclick=async()=>{if(!confirm('Delete this post permanently?'))return;try{await api('/'+item.id,{method:'DELETE'});items=items.filter(i=>i!==item);render();}catch{alert('Could not delete.');}};
+ return el('article',{className:'card'+(item.approved?' approved':'')},
+  el('div',{className:'meta'},el('span',{className:'badge'+(item.approved?' ok':'')},item.approved?'Published':'Pending'),el('span',{className:'badge'},item.kind),el('span',{className:'name'},item.name),
+   item.kind==='review'?el('span',{className:'stars',title:item.rating+' / 5'},'★'.repeat(item.rating)+'☆'.repeat(5-item.rating)):'',el('span',{},new Date(item.createdAt).toLocaleString())),
+  el('p',{className:'text'},item.text),el('label',{},item.kind==='question'?'Answer':'Reply (optional)'),answer,el('div',{className:'actions'},approve,hide,del));
+}
+document.getElementById('logout').onclick=()=>{token=null;try{sessionStorage.removeItem('pappas-admin');}catch{}login();};
+token?load():login();
+</script>
+</body>
+</html>

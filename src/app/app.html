@@ -1,0 +1,1061 @@
+<a class="skip" href="#main">{{t.skip}}</a>
+<div class="topbar">
+  <span>{{t.topbar.tag}}</span
+  ><a href="tel:+33652527567">{{t.topbar.cta}} &nbsp; +33 6 52 52 75 67 ↗</a>
+</div>
+<header [class.scrolled]="scrolled">
+  <a class="brand" href="#" [attr.aria-label]="t.home"
+    ><span class="brand-logo" aria-hidden="true"
+      ><img
+        class="brand-icon"
+        src="images/pappas-peacock-p.png?v=2"
+        alt=""
+        width="169"
+        height="229"
+      /><img
+        class="brand-name"
+        src="images/pappas-wordmark.png"
+        alt=""
+        width="480"
+        height="209"
+      /><span class="brand-tagline">{{t.tagline}}</span></span
+    ></a
+  >
+  <div class="header-tools">
+    <div class="lang-switch" role="group" [attr.aria-label]="t.tools.language">
+      <button
+        *ngFor="let item of languages"
+        type="button"
+        [class.active]="lang===item.code"
+        [attr.aria-pressed]="lang===item.code"
+        [attr.lang]="item.code"
+        [title]="item.name"
+        (click)="setLang(item.code)"
+      >
+        {{item.label}}
+      </button>
+    </div>
+    <button
+      class="theme-toggle"
+      type="button"
+      (click)="toggleTheme()"
+      [attr.aria-label]="theme==='dark'?t.tools.light:t.tools.dark"
+      [title]="theme==='dark'?t.tools.light:t.tools.dark"
+    >
+      <svg *ngIf="theme==='dark'" viewBox="0 0 24 24" aria-hidden="true">
+        <circle
+          cx="12"
+          cy="12"
+          r="4.2"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+        />
+        <path
+          d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        /></svg
+      ><svg *ngIf="theme!=='dark'" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </div>
+  <a class="button small header-enquire" href="#enquire"
+    >{{t.nav.enquire}} <span>↗</span></a
+  >
+</header>
+<main id="main">
+  <section
+    class="hero"
+    [attr.aria-label]="t.heroUi.aria"
+    (mouseenter)="pauseHero(true)"
+    (mouseleave)="pauseHero(false)"
+  >
+    <img
+      *ngFor="let slide of heroSlides;let i=index"
+      class="hero-photo"
+      [class.active]="i===heroIndex"
+      [src]="'images/'+slide"
+      [alt]="i===heroIndex?t.heroUi.photoAlt:''"
+      [attr.aria-hidden]="i!==heroIndex"
+      [attr.fetchpriority]="i===0?'high':null"
+      decoding="async"
+    />
+    <div class="hero-shade"></div>
+    <div class="hero-content" *ngFor="let slide of [heroIndex]">
+      <p class="eyebrow light"><span></span> {{hero.label}}</p>
+      <h1>{{hero.title}}<br /><em>{{hero.em}}</em></h1>
+      <p class="hero-copy">{{hero.text}}</p>
+      <div class="hero-actions">
+        <a class="button" href="#enquire">{{t.heroUi.book}} <span>↗</span></a
+        ><a class="text-link" href="#services"
+          >{{t.heroUi.explore}} <span>↓</span></a
+        >
+      </div>
+    </div>
+    <div class="hero-bottom">
+      <span class="hero-caption">{{hero.caption}}</span>
+    </div>
+    <div class="hero-progress" aria-hidden="true">
+      <span
+        *ngFor="let slide of heroSlides;let i=index"
+        [class.active]="i===heroIndex"
+        [class.done]="i<heroIndex"
+        ><i></i
+      ></span>
+    </div>
+    <a href="#about" class="scroll-cue" [attr.aria-label]="t.heroUi.discover"
+      >{{t.heroUi.scroll}} <span>↓</span></a
+    >
+  </section>
+  <section id="about" class="about section">
+    <div class="about-visual">
+      <img
+        class="about-main"
+        src="images/table.jpg"
+        [alt]="t.about.tableAlt"
+        loading="lazy"
+      /><img
+        class="about-detail"
+        src="images/dosa.jpg"
+        [alt]="t.about.flowersAlt"
+        loading="lazy"
+      /><span class="photo-label">{{t.about.photoLabel}}</span>
+      <div class="about-seal">
+        <img
+          src="images/pappas-peacock-p.png?v=2"
+          [alt]="t.about.logoAlt"
+          width="169"
+          height="229"
+        />
+      </div>
+    </div>
+    <div class="about-copy">
+      <h2 class="why-title">{{t.about.whyTitle}}</h2>
+      <ul class="why-list">
+        <li *ngFor="let item of t.about.why">
+          <span aria-hidden="true">✓</span>
+          <div>
+            <strong>{{item.title}}</strong>
+            <p>{{item.text}}</p>
+          </div>
+        </li>
+      </ul>
+      <a class="under-link" href="#services">{{t.about.link}} <span>↗</span></a>
+    </div>
+  </section>
+  <section class="services-section" id="services">
+    <div class="section">
+      <div class="services-head">
+        <h2>{{t.servicesUi.title}}</h2>
+        <p>{{t.servicesUi.sub}}</p>
+      </div>
+      <div
+        class="service-track auto-track"
+        id="service-track"
+        tabindex="0"
+        [attr.aria-label]="t.servicesUi.track"
+      >
+        <article
+          class="service-card"
+          *ngFor="let service of serviceList;let i=index"
+        >
+          <button
+            class="service-image"
+            (click)="openDialog('service',service.id)"
+            [attr.aria-label]="t.servicesUi.explore+' '+service.name"
+          >
+            <img
+              [src]="'images/'+service.image"
+              [alt]="service.name+' — '+t.servicesUi.inspiration"
+              loading="lazy"
+            /><span class="service-number">0{{i+1}}</span
+            ><span class="image-arrow">↗</span>
+          </button>
+          <div class="service-card-copy">
+            <span class="service-icon" aria-hidden="true"
+              >{{service.icon}}</span
+            >
+            <h3>
+              <button (click)="openDialog('service',service.id)">
+                {{service.name}}
+              </button>
+            </h3>
+            <p>{{service.short}}</p>
+            <button
+              class="button small card-explore"
+              (click)="openDialog('service',service.id)"
+            >
+              {{t.servicesUi.explore}} <span>↗</span>
+            </button>
+          </div>
+        </article>
+      </div>
+      <div class="services-foot">
+        <a href="#enquire">{{t.servicesUi.buildBrief}} ↗</a>
+      </div>
+    </div>
+  </section>
+  <section class="vin-section" id="vin-honneur">
+    <div class="section">
+      <div class="services-head">
+        <p class="eyebrow">{{t.vinUi.eyebrow}}</p>
+        <h2>{{t.vinUi.h}}</h2>
+      </div>
+      <div class="reel-grid">
+        <a
+          *ngFor="let reel of reels;let i=index"
+          class="reel-card"
+          [href]="reel.url"
+          target="_blank"
+          rel="noopener"
+          [attr.aria-label]="t.vinUi.watch+': '+t.vinUi.reels[i]"
+          ><img [src]="'images/'+reel.image" alt="" loading="lazy" /><span
+            class="reel-play"
+            aria-hidden="true"
+            ><svg viewBox="0 0 24 24">
+              <path d="M8 5.5v13l10.5-6.5Z" fill="currentColor" /></svg></span
+          ><span class="reel-meta"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <path [attr.d]="socials[1].path" fill="currentColor" /></svg
+            ><b>{{t.vinUi.reels[i]}}</b><small>{{t.vinUi.watch}} ↗</small></span
+          ></a
+        >
+      </div>
+      <h3 class="vin-explore">
+        {{t.vinUi.explore}}<br /><em>{{t.vinUi.em}}</em>
+      </h3>
+      <div
+        class="vin-track auto-track"
+        tabindex="0"
+        [attr.aria-label]="t.vinUi.track"
+      >
+        <article class="vin-card" *ngFor="let dishes of vinMenu;let i=index">
+          <span class="vin-num">{{(i+1).toString().padStart(2,'0')}}</span
+          ><img
+            class="vin-logo"
+            src="images/pappas-peacock-p.png?v=2"
+            alt=""
+            width="169"
+            height="229"
+          />
+          <h4>{{t.vinUi.categories[i]}}</h4>
+          <ul>
+            <li *ngFor="let dish of dishes">{{dish}}</li>
+          </ul>
+          <button
+            class="under-link"
+            type="button"
+            (click)="openDialog('vin',i.toString())"
+          >
+            {{t.vinUi.exploreMenu}} ↗
+          </button>
+        </article>
+      </div>
+    </div>
+  </section>
+  <section class="menu-section" id="menus">
+    <div class="section">
+      <div class="services-head">
+        <p class="eyebrow">{{t.menusUi.eyebrow}}</p>
+        <h2>{{t.menusUi.h}} <em>{{t.menusUi.em}}</em></h2>
+      </div>
+      <div class="menu-carousel">
+        <button
+          class="mc-arrow prev"
+          type="button"
+          (click)="scrollTrack('menu-track',-1)"
+          [attr.aria-label]="t.menuCardsUi.prev"
+        >
+          ‹
+        </button>
+        <div
+          class="menu-track auto-track"
+          id="menu-track"
+          tabindex="0"
+          [attr.aria-label]="t.menuCardsUi.track"
+        >
+          <article class="mc-card mc-cover">
+            <div class="mc-badge">
+              <img
+                src="images/pappas-peacock-p.png?v=2"
+                alt=""
+                width="169"
+                height="229"
+              />
+            </div>
+            <div class="mc-cover-text">
+              <b>{{t.menuCardsUi.brand}}</b><i>{{t.menuCardsUi.script}}</i
+              ><strong>{{t.menuCardsUi.big}}</strong
+              ><small>{{t.menuCardsUi.tag}}</small>
+            </div>
+          </article>
+          <article class="mc-card" *ngFor="let card of menuCards">
+            <div class="mc-head">{{t.menuCardsUi.menu}}</div>
+            <div class="mc-badge">
+              <img
+                src="images/pappas-peacock-p.png?v=2"
+                alt=""
+                width="169"
+                height="229"
+              />
+            </div>
+            <div class="mc-body">
+              <h3>{{t.menuCardsUi.titles[card.id]}}</h3>
+              <ol>
+                <li
+                  *ngFor="let dish of (card.id==='services'?t.menuCardsUi.services:card.dishes)"
+                >
+                  {{dish}}
+                </li>
+              </ol>
+            </div>
+            <div class="mc-photo">
+              <img [src]="'images/'+card.image" alt="" loading="lazy" />
+            </div>
+            <div class="mc-diet" *ngIf="card.diet">
+              <span class="veg" *ngIf="card.diet!=='nonveg'"
+                ><i></i>{{t.menuCardsUi.veg}}</span
+              ><span class="nonveg" *ngIf="card.diet!=='veg'"
+                ><i></i>{{t.menuCardsUi.nonveg}}</span
+              >
+            </div>
+          </article>
+          <article class="mc-card mc-cover mc-end">
+            <div class="mc-badge">
+              <img
+                src="images/pappas-peacock-p.png?v=2"
+                alt=""
+                width="169"
+                height="229"
+              />
+            </div>
+            <div class="mc-cover-text">
+              <b>{{t.menuCardsUi.brand}}</b><i>{{t.menuCardsUi.endScript}}</i
+              ><strong>{{t.menuCardsUi.endBig}}</strong
+              ><a class="button small" href="#enquire" (click)="chooseMenu()"
+                >{{t.menuCardsUi.cta}} <span>↗</span></a
+              >
+            </div>
+          </article>
+        </div>
+        <button
+          class="mc-arrow next"
+          type="button"
+          (click)="scrollTrack('menu-track',1)"
+          [attr.aria-label]="t.menuCardsUi.next"
+        >
+          ›
+        </button>
+      </div>
+      <p class="menu-pdf">
+        <a
+          href="pappas-events-menu.pdf"
+          target="_blank"
+          rel="noopener"
+          class="under-link"
+          >{{t.menusUi.pdf}} ↓</a
+        >
+      </p>
+    </div>
+  </section>
+  <section class="stats-section" [attr.aria-label]="t.stats.eyebrow">
+    <div class="stats-intro">
+      <p class="eyebrow">{{t.stats.eyebrow}}</p>
+      <h2>{{t.stats.h}} <em>{{t.stats.em}}</em></h2>
+      <p>{{t.stats.text}}</p>
+    </div>
+    <div class="stats-banner">
+      <img src="images/feast.jpg" [alt]="t.stats.imageAlt" loading="lazy" />
+      <dl class="stats-card">
+        <div *ngFor="let value of statTargets; let i=index">
+          <dt>{{t.stats.items[i]}}</dt>
+          <dd [attr.aria-label]="value">{{statShown[i]}}</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+  <section class="showcase section" id="showcase">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">{{t.showcaseUi.eyebrow}}</p>
+        <h2>{{t.showcaseUi.h}}<br /><em>{{t.showcaseUi.em}}</em></h2>
+      </div>
+      <div class="gallery-filters" [attr.aria-label]="t.showcaseUi.filters">
+        <button
+          *ngFor="let filter of galleryFilters"
+          [class.active]="galleryFilter===filter"
+          [attr.aria-pressed]="galleryFilter===filter"
+          (click)="galleryFilter=filter"
+        >
+          {{t.galleryCategories[filter]}}
+        </button>
+      </div>
+    </div>
+    <div class="gallery-grid">
+      <button
+        *ngFor="let item of galleryItems"
+        (click)="openDialog('image',item.image)"
+        [attr.aria-label]="t.showcaseUi.enlarge+' '+item.title"
+      >
+        <img
+          [src]="'images/'+item.image"
+          [alt]="item.title"
+          loading="lazy"
+        /><span
+          ><small>{{t.galleryCategories[item.category]}}</small>{{item.title}}<b
+            >↗</b
+          ></span
+        >
+      </button>
+    </div>
+    <p class="gallery-note">{{t.showcaseUi.note}}</p>
+  </section>
+  <section class="full-event-banner">
+    <img src="images/events/venue.jpg" alt="" loading="lazy" />
+    <div>
+      <p class="eyebrow light">{{t.banner.eyebrow}}</p>
+      <h2>{{t.banner.h}}<br /><em>{{t.banner.em}}</em></h2>
+      <a class="button" href="#enquire">{{t.banner.cta}} <span>↗</span></a>
+    </div>
+  </section>
+  <section class="reviews-section" id="reviews">
+    <div class="section">
+      <div class="services-head">
+        <p class="eyebrow">{{t.reviewsUi.eyebrow}}</p>
+        <h2>{{t.reviewsUi.h}} <em>{{t.reviewsUi.em}}</em></h2>
+        <p>{{t.reviewsUi.intro}}</p>
+      </div>
+      <div class="review-videos" *ngIf="reviewVideos.length">
+        <h3>{{t.reviewsUi.videos}}</h3>
+        <div class="review-video-grid">
+          <figure *ngFor="let video of reviewVideos">
+            <video
+              [src]="'videos/'+video.file"
+              [attr.poster]="video.poster?'images/'+video.poster:null"
+              controls
+              preload="metadata"
+              playsinline
+            ></video>
+            <figcaption *ngIf="video.name">{{video.name}}</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="reviews-layout">
+        <div class="reviews-feed">
+          <div class="reviews-head">
+            <h3>{{t.reviewsUi.reviewsTitle}}</h3>
+            <p class="reviews-summary" *ngIf="reviewList.length">
+              <strong>{{averageRating}}</strong
+              ><span class="review-stars" aria-hidden="true">★★★★★</span
+              ><small>({{reviewList.length}})</small>
+            </p>
+          </div>
+          <div class="review-cards" *ngIf="reviewList.length;else noReviews">
+            <article class="review-card" *ngFor="let review of reviewList">
+              <div
+                class="review-stars"
+                [attr.aria-label]="review.rating+' '+t.reviewsUi.starsAria"
+              >
+                {{stars(review.rating)}}
+              </div>
+              <p>“{{review.text}}”</p>
+              <div class="review-meta">
+                <b>{{review.name}}</b
+                ><time [attr.datetime]="review.createdAt"
+                  >{{reviewDate(review.createdAt)}}</time
+                >
+              </div>
+              <div class="review-reply" *ngIf="review.answer">
+                <small>{{t.reviewsUi.answer}}</small>{{review.answer}}
+              </div>
+            </article>
+          </div>
+          <ng-template #noReviews
+            ><p class="reviews-empty">{{t.reviewsUi.empty}}</p></ng-template
+          >
+          <h3>{{t.reviewsUi.questionsTitle}}</h3>
+          <div
+            class="question-list"
+            *ngIf="questionList.length;else noQuestions"
+          >
+            <details *ngFor="let question of questionList">
+              <summary>{{question.text}}<span>+</span></summary>
+              <p><b>{{t.reviewsUi.answer}}:</b> {{question.answer}}</p>
+              <small class="question-by">— {{question.name}}</small>
+            </details>
+          </div>
+          <ng-template #noQuestions
+            ><p class="reviews-empty">{{t.reviewsUi.emptyQ}}</p></ng-template
+          >
+        </div>
+        <div class="review-form-wrap">
+          <div class="review-tabs" role="group">
+            <button
+              type="button"
+              [class.active]="reviewForm.kind==='review'"
+              [attr.aria-pressed]="reviewForm.kind==='review'"
+              (click)="setReviewKind('review')"
+            >
+              ★ {{t.reviewsUi.tabReview}}</button
+            ><button
+              type="button"
+              [class.active]="reviewForm.kind==='question'"
+              [attr.aria-pressed]="reviewForm.kind==='question'"
+              (click)="setReviewKind('question')"
+            >
+              ? {{t.reviewsUi.tabQuestion}}
+            </button>
+          </div>
+          <form
+            *ngIf="!reviewSent;else reviewThanks"
+            #reviewNgForm="ngForm"
+            (ngSubmit)="reviewNgForm.valid && submitReview()"
+          >
+            <label
+              >{{t.reviewsUi.name}}<input
+                name="reviewName"
+                [(ngModel)]="reviewForm.name"
+                required
+                maxlength="100"
+                autocomplete="name"
+                [placeholder]="t.reviewsUi.namePh"
+            /></label>
+            <fieldset class="star-input" *ngIf="reviewForm.kind==='review'">
+              <legend>{{t.reviewsUi.rating}}</legend>
+              <button
+                type="button"
+                *ngFor="let n of [1,2,3,4,5]"
+                [class.on]="n<=reviewForm.rating"
+                [attr.aria-pressed]="n===reviewForm.rating"
+                [attr.aria-label]="n+' '+t.reviewsUi.starsAria"
+                (click)="reviewForm.rating=n"
+              >
+                ★
+              </button>
+            </fieldset>
+            <label
+              >{{reviewForm.kind==='review'?t.reviewsUi.review:t.reviewsUi.question}}<textarea
+                name="reviewText"
+                [(ngModel)]="reviewForm.text"
+                required
+                minlength="3"
+                maxlength="1500"
+                rows="5"
+                [placeholder]="reviewForm.kind==='review'?t.reviewsUi.reviewPh:t.reviewsUi.questionPh"
+              ></textarea></label
+            ><label class="honeypot" aria-hidden="true"
+              >{{t.enquire.honeypot}}<input
+                name="reviewWebsite"
+                [(ngModel)]="reviewForm.website"
+                tabindex="-1"
+                autocomplete="off"
+            /></label>
+            <p class="error" role="alert" *ngIf="reviewError">
+              {{reviewError==='offline'?t.reviewsUi.offline:t.reviewsUi.error}}
+            </p>
+            <button
+              class="button"
+              type="submit"
+              [disabled]="reviewSending || !reviewNgForm.valid || (reviewForm.kind==='review' && !reviewForm.rating)"
+            >
+              {{reviewSending?t.reviewsUi.sending:t.reviewsUi.send}}
+              <span>↗</span>
+            </button>
+          </form>
+          <ng-template #reviewThanks
+            ><div class="review-thanks" role="status">
+              <span aria-hidden="true">✧</span>
+              <h3>{{t.reviewsUi.thanks}}</h3>
+              <p>{{t.reviewsUi.thanksText}}</p>
+              <button
+                class="under-link"
+                type="button"
+                (click)="reviewSent=false"
+              >
+                {{t.reviewsUi.another}} ↗
+              </button>
+            </div></ng-template
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="enquire-section" id="enquire">
+    <div class="section enquire">
+      <div class="contact-copy">
+        <p class="eyebrow">{{t.enquire.eyebrow}}</p>
+        <h2>{{t.enquire.h}}<br /><em>{{t.enquire.em1}}</em></h2>
+        <p>{{t.enquire.intro}}</p>
+        <div class="event-calendar" [class.has-date]="form.date">
+          <div class="cal-head">
+            <div>
+              <span class="cal-eyebrow">{{t.calendar.eyebrow}}</span
+              ><strong class="cal-title" aria-live="polite"
+                >{{calTitle}}</strong
+              >
+            </div>
+            <div class="cal-nav">
+              <button
+                type="button"
+                (click)="moveMonth(-1)"
+                [disabled]="!canPrevMonth"
+                [attr.aria-label]="t.calendar.prev"
+                [title]="t.calendar.prev"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M14.5 6 8.5 12l6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg></button
+              ><button
+                type="button"
+                (click)="moveMonth(1)"
+                [attr.aria-label]="t.calendar.next"
+                [title]="t.calendar.next"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="m9.5 6 6 6-6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="cal-grid">
+            <span class="cal-wd" *ngFor="let w of weekdays" aria-hidden="true"
+              >{{w}}</span
+            ><ng-container *ngFor="let d of calDays"
+              ><span class="cal-blank" *ngIf="!d"></span
+              ><button
+                *ngIf="d"
+                type="button"
+                class="cal-day"
+                [class.weekend]="d.weekend"
+                [class.today]="d.today"
+                [class.selected]="d.iso===form.date"
+                [disabled]="d.past"
+                [attr.aria-pressed]="d.iso===form.date"
+                [attr.aria-label]="d.label"
+                (click)="pickDate(d.iso)"
+              >
+                {{d.day}}
+              </button></ng-container
+            >
+          </div>
+          <div class="cal-foot">
+            <div class="cal-choice">
+              <span>{{form.date?t.calendar.selected:t.calendar.pick}}</span
+              ><strong *ngIf="form.date">{{selectedDateLabel}}</strong>
+            </div>
+            <button
+              *ngIf="form.date"
+              type="button"
+              class="cal-continue"
+              (click)="focusForm()"
+            >
+              {{t.calendar.cont}} <span aria-hidden="true">→</span>
+            </button>
+            <p class="cal-note">{{t.calendar.note}}</p>
+          </div>
+        </div>
+        <div class="contact-tiles">
+          <a class="contact-tile" href="tel:+33652527567"
+            ><span class="tile-icon" aria-hidden="true"
+              ><svg viewBox="0 0 24 24">
+                <path
+                  d="M6.6 3.5h2.6l1.4 4.1-2 1.4a12.4 12.4 0 0 0 6.4 6.4l1.4-2 4.1 1.4v2.6a2 2 0 0 1-2.2 2A16.6 16.6 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                /></svg></span
+            ><span class="tile-text"
+              ><small>{{t.enquire.callLabel}}</small
+              ><strong class="tile-phone">+33 6 52 52 75 67</strong></span
+            ><span class="tile-arrow" aria-hidden="true">→</span></a
+          ><a
+            class="contact-tile"
+            [href]="whatsapp"
+            target="_blank"
+            rel="noopener"
+            ><span class="tile-icon wa" aria-hidden="true"
+              ><svg viewBox="0 0 24 24">
+                <path
+                  [attr.d]="socials[0].path"
+                  fill="currentColor"
+                /></svg></span
+            ><span class="tile-text"
+              ><small>WhatsApp</small
+              ><strong>{{t.enquire.whatsapp}}</strong></span
+            ><span class="tile-arrow" aria-hidden="true">↗</span></a
+          >
+        </div>
+      </div>
+      <div class="form-wrap">
+        <div *ngIf="!submitted;else confirmation">
+          <span class="form-kicker">{{t.enquire.kicker}}</span>
+          <h3>{{t.enquire.title}}</h3>
+          <p class="form-intro">{{t.enquire.formIntro}}</p>
+          <form #enquiry="ngForm" (ngSubmit)="enquiry.valid && submit()">
+            <fieldset class="service-picker">
+              <legend>{{t.enquire.legend1}}</legend>
+              <div>
+                <label
+                  *ngFor="let service of serviceList"
+                  [class.selected]="selectedServices.includes(service.id)"
+                  ><input
+                    type="checkbox"
+                    [attr.aria-label]="service.name"
+                    [checked]="selectedServices.includes(service.id)"
+                    (change)="toggleService(service.id)"
+                  /><span>{{service.name}}</span
+                  ><b
+                    >{{selectedServices.includes(service.id)?'✓':'+'}}</b
+                  ></label
+                >
+              </div>
+            </fieldset>
+            <fieldset class="event-fields">
+              <legend>{{t.enquire.legend2}}</legend>
+              <div class="form-grid">
+                <label
+                  >{{t.enquire.name}}<input
+                    name="name"
+                    [(ngModel)]="form.name"
+                    required
+                    maxlength="100"
+                    autocomplete="name"
+                    [placeholder]="t.enquire.namePh" /></label
+                ><label
+                  >{{t.enquire.email}}<input
+                    name="email"
+                    [(ngModel)]="form.email"
+                    required
+                    email
+                    type="email"
+                    maxlength="200"
+                    autocomplete="email"
+                    [placeholder]="t.enquire.emailPh" /></label
+                ><label
+                  >{{t.enquire.phone}}<input
+                    name="phone"
+                    [(ngModel)]="form.phone"
+                    required
+                    type="tel"
+                    minlength="8"
+                    maxlength="30"
+                    autocomplete="tel"
+                    [placeholder]="t.enquire.phonePh" /></label
+                ><label
+                  >{{t.enquire.occasion}}<select
+                    name="event"
+                    [(ngModel)]="form.event"
+                  >
+                    <option *ngFor="let item of occasionList" [value]="item.id">
+                      {{item.name}}
+                    </option>
+                    <option value="other">{{t.occasionsUi.other}}</option>
+                  </select></label
+                ><label
+                  >{{t.enquire.date}}<input
+                    name="date"
+                    [(ngModel)]="form.date"
+                    (ngModelChange)="syncCalendar($event)"
+                    type="date"
+                    [min]="today"
+                    required /></label
+                ><label
+                  >{{t.enquire.guests}}<input
+                    name="guests"
+                    [(ngModel)]="form.guests"
+                    type="number"
+                    min="1"
+                    max="10000"
+                    required /></label
+                ><label class="full"
+                  >{{t.enquire.location}}<input
+                    name="location"
+                    [(ngModel)]="form.location"
+                    required
+                    maxlength="200"
+                    [placeholder]="t.enquire.locationPh" /></label
+                ><label class="full"
+                  >{{t.enquire.vision}}<textarea
+                    name="message"
+                    [(ngModel)]="form.message"
+                    rows="3"
+                    maxlength="2500"
+                    [placeholder]="t.enquire.visionPh"
+                  ></textarea>
+                </label>
+              </div>
+            </fieldset>
+            <p class="chosen-menu" *ngIf="selectedMenu">
+              {{t.enquire.menuInspiration}}: {{menuName(selectedMenu)}}
+              <button
+                type="button"
+                (click)="selectedMenu=''"
+                [attr.aria-label]="t.enquire.removeMenu"
+              >
+                ✕
+              </button>
+            </p>
+            <label class="consent"
+              ><input
+                type="checkbox"
+                name="consent"
+                [(ngModel)]="form.consent"
+                required
+              /><span>{{t.enquire.consent}}</span></label
+            ><label class="honeypot" aria-hidden="true"
+              >{{t.enquire.honeypot}}<input
+                name="website"
+                [(ngModel)]="form.website"
+                tabindex="-1"
+                autocomplete="off"
+            /></label>
+            <p class="error" role="alert" *ngIf="formError">
+              {{t.errors[formError]}}
+            </p>
+            <button
+              class="button submit"
+              type="submit"
+              [disabled]="sending || !enquiry.valid"
+            >
+              {{sending?t.enquire.preparing:apiConnected?t.enquire.send:t.enquire.review}}
+              <span>↗</span>
+            </button>
+            <p class="form-note">
+              {{apiConnected?t.enquire.noteApi:t.enquire.noteWhatsapp}}
+            </p>
+          </form>
+        </div>
+        <ng-template #confirmation
+          ><div
+            class="confirmation"
+            id="enquiry-review"
+            tabindex="-1"
+            role="status"
+          >
+            <span class="review-symbol">✧</span>
+            <p class="eyebrow">
+              {{apiConnected?t.enquire.received:t.enquire.ready}}
+            </p>
+            <h3>{{t.enquire.confTitle}}<br /><em>{{t.enquire.confEm}}</em></h3>
+            <p *ngIf="!apiConnected">{{t.enquire.confWhatsapp}}</p>
+            <p *ngIf="apiConnected">{{t.enquire.confApi}}</p>
+            <dl class="brief-summary">
+              <div>
+                <dt>{{t.enquire.sumOccasion}}</dt>
+                <dd>{{occasionName(form.event)}}</dd>
+              </div>
+              <div>
+                <dt>{{t.enquire.sumWhen}}</dt>
+                <dd>{{selectedDateLabel||form.date}}</dd>
+              </div>
+              <div>
+                <dt>{{t.enquire.sumGuests}}</dt>
+                <dd>{{form.guests}}</dd>
+              </div>
+              <div>
+                <dt>{{t.enquire.sumLocation}}</dt>
+                <dd>{{form.location}}</dd>
+              </div>
+              <div>
+                <dt>{{t.enquire.sumServices}}</dt>
+                <dd>{{selectedServiceNames}}</dd>
+              </div>
+              <div *ngIf="selectedMenu">
+                <dt>{{t.enquire.sumMenu}}</dt>
+                <dd>{{menuName(selectedMenu)}}</dd>
+              </div>
+            </dl>
+            <a class="button" [href]="whatsapp" target="_blank" rel="noopener"
+              >{{apiConnected?t.enquire.continueWhatsapp:t.enquire.sendWhatsapp}}
+              <span>↗</span></a
+            ><button class="under-link" (click)="submitted=false">
+              {{t.enquire.edit}}
+            </button>
+          </div></ng-template
+        >
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="footer-main">
+    <div>
+      <a class="brand" href="#" [attr.aria-label]="t.home"
+        ><span class="brand-logo" aria-hidden="true"
+          ><img
+            class="brand-icon"
+            src="images/pappas-peacock-p.png?v=2"
+            alt=""
+            width="169"
+            height="229"
+          /><img
+            class="brand-name"
+            src="images/pappas-wordmark.png"
+            alt=""
+            width="480"
+            height="209"
+          /><span class="brand-tagline">{{t.tagline}}</span></span
+        ></a
+      >
+      <p>{{t.footer.line1}}<br />{{t.footer.line2}}</p>
+      <div class="social-links" [attr.aria-label]="t.footer.followAria">
+        <span>{{t.footer.follow}}</span>
+        <div>
+          <a
+            *ngFor="let social of socials"
+            [href]="social.url"
+            target="_blank"
+            rel="noopener"
+            [attr.aria-label]="social.name"
+            [title]="social.name"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <path [attr.d]="social.path" fill="currentColor" /></svg
+          ></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-links">
+      <span>{{t.footer.explore}}</span><a href="#about">{{t.footer.approach}}</a
+      ><a href="#services">{{t.footer.services}}</a
+      ><a href="#vin-honneur">{{t.footer.occasion}}</a
+      ><a href="#showcase">{{t.footer.inspiration}}</a>
+    </div>
+    <div class="footer-links">
+      <span>{{t.footer.create}}</span
+      ><a class="footer-phone" href="tel:+33652527567">+33 6 52 52 75 67 ↗</a
+      ><a [href]="whatsapp" target="_blank" rel="noopener"
+        >{{t.footer.chat}} ↗</a
+      ><a href="#enquire">{{t.footer.brief}} ↗</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>{{t.footer.rights}}</span>
+    <div>
+      <button (click)="openDialog('image','privacy')">
+        {{t.footer.privacy}}</button
+      ><a href="#">{{t.footer.top}} ↑</a>
+    </div>
+  </div>
+</footer>
+<a
+  class="floating-contact"
+  [href]="whatsapp"
+  target="_blank"
+  rel="noopener"
+  [attr.aria-label]="t.floating.aria"
+  ><svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path
+      d="M20 11.5a8 8 0 0 1-11.7 7.1L4 20l1.3-4.2A8 8 0 1 1 20 11.5Z"
+      stroke="currentColor"
+      stroke-width="1.4"
+    />
+    <path
+      d="M8.5 7.5c-.8 1 .2 3.4 1.7 4.9s3.8 2.5 4.8 1.6l-1.6-1.7-1 .7a9 9 0 0 1-3-3l.8-1-1.7-1.5Z"
+      stroke="currentColor"
+      stroke-width="1.2"
+      stroke-linejoin="round"
+    /></svg
+  ><span>{{t.floating.text}}</span></a
+>
+<div
+  class="modal"
+  *ngIf="lightbox || serviceId || vinIndex!==null"
+  (click)="closeDialog()"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="vinIndex!==null?t.vinUi.categories[vinIndex]:serviceDetail?serviceDetail.name:lightbox==='privacy'?t.dialog.privacy:t.dialog.inspiration"
+>
+  <button
+    class="dialog-close"
+    (click)="closeDialog()"
+    [attr.aria-label]="t.dialog.close"
+  >
+    ✕
+  </button>
+  <article
+    class="service-dialog"
+    *ngIf="serviceDetail as detail"
+    (click)="$event.stopPropagation()"
+  >
+    <img [src]="'images/'+detail.image" [alt]="detail.name" />
+    <div>
+      <p class="eyebrow">PAPPA’S EVENTS / {{detail.name.toUpperCase()}}</p>
+      <h2>{{detail.title}}</h2>
+      <p>{{detail.description}}</p>
+      <ul>
+        <li *ngFor="let item of detail.items"><span>✧</span>{{item}}</li>
+      </ul>
+      <button class="button" (click)="addService(detail.id)">
+        {{t.dialog.add}} <span>↗</span>
+      </button>
+      <p class="dialog-note">{{t.dialog.note}}</p>
+    </div>
+  </article>
+  <article
+    class="vin-dialog"
+    *ngIf="vinIndex!==null"
+    (click)="$event.stopPropagation()"
+  >
+    <img
+      class="vin-dialog-logo"
+      src="images/pappas-peacock-p.png?v=2"
+      alt=""
+      width="169"
+      height="229"
+    />
+    <p class="eyebrow">
+      VIN D’HONNEUR / {{(vinIndex+1).toString().padStart(2,'0')}}
+    </p>
+    <h2>{{t.vinUi.categories[vinIndex]}}</h2>
+    <ol>
+      <li *ngFor="let dish of vinMenu[vinIndex]">{{dish}}</li>
+    </ol>
+    <button class="button" (click)="addService('catering')">
+      {{t.dialog.add}} <span>↗</span>
+    </button>
+    <p class="dialog-note">{{t.vinUi.note}}</p>
+  </article>
+  <img
+    class="enlarged-photo"
+    *ngIf="lightbox && lightbox!=='privacy'"
+    [src]="'images/'+lightbox"
+    [alt]="t.dialog.enlarged"
+    (click)="$event.stopPropagation()"
+  />
+  <div
+    class="privacy"
+    *ngIf="lightbox==='privacy'"
+    (click)="$event.stopPropagation()"
+  >
+    <p class="eyebrow">PAPPA’S EVENTS</p>
+    <h2>{{t.dialog.privacy}}</h2>
+    <p *ngIf="!apiConnected">{{t.dialog.privacyWhatsapp}}</p>
+    <p *ngIf="apiConnected">{{t.dialog.privacyApi}}</p>
+    <p>{{t.dialog.privacyLinks}}</p>
+    <p>{{t.dialog.privacyCall}}</p>
+  </div>
+</div>
